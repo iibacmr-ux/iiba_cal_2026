@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FÉMA-DATA - Évaluation Maturité Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #208078;
+            --secondary: #f39c12;
+            --success: #27ae60;
+            --warning: #e74c3c;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+            --border: #bdc3c7;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a6b62 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--light-bg);
+            border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .tab-button:hover {
+            background: rgba(32, 128, 120, 0.1);
+        }
+
+        .tab-button.active {
+            background: white;
+            color: var(--primary);
+            border-bottom: 4px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FORMULAIRE STYLES */
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-text);
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .question-context {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a6b62;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(32, 128, 120, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #e67e22;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-print {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #2980b9;
+        }
+
+        /* RÉSULTATS */
+        .results-container {
+            display: none;
+        }
+
+        .score-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .score-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 20px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .level-1 { background: #e74c3c; }
+        .level-2 { background: #f39c12; }
+        .level-3 { background: #f1c40f; color: var(--dark-text); }
+        .level-4 { background: #27ae60; }
+        .level-5 { background: #2980b9; }
+
+        .benchmark-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .benchmark-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-item:last-child {
+            border-bottom: none;
+        }
+
+        .recommendation {
+            background: #e8f5e9;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .recommendation h4 {
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+
+        .recommendation.medium {
+            background: #fff3e0;
+            border-left-color: var(--secondary);
+        }
+
+        .recommendation.medium h4 {
+            color: var(--secondary);
+        }
+
+        .recommendation.long {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+
+        .recommendation.long h4 {
+            color: #2196f3;
+        }
+
+        /* STATISTIQUES */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), #1a6b62);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .chart {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .bar-label {
+            width: 120px;
+            font-weight: 500;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 25px;
+            background: var(--light-bg);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .bar-value {
+            width: 50px;
+            text-align: right;
+            margin-left: 15px;
+            font-weight: 600;
+        }
+
+        /* PROFIL UTILISATEUR */
+        .profile-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-summary h3 {
+            margin-bottom: 15px;
+        }
+
+        .profile-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .tabs, .buttons, .tab-button {
+                display: none !important;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .page-break {
+                page-break-after: always;
+                margin: 20px 0;
+            }
+
+            .results-container {
+                display: block !important;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                text-align: left;
+                border-bottom: none;
+                border-left: 4px solid transparent;
+            }
+
+            .tab-button.active {
+                border-left: 4px solid var(--primary);
+                border-bottom: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .scale-labels {
+                font-size: 0.75em;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .radar-placeholder {
+            background: var(--light-bg);
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 FÉMA-DATA</h1>
+            <p>Formulaire d'Évaluation de la Maturité Data au Cameroun</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Évaluez votre maturité data en 10-15 minutes</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event, 'questionnaire')">📋 Questionnaire</button>
+            <button class="tab-button" onclick="switchTab(event, 'resultats')">📊 Résultats</button>
+            <button class="tab-button" onclick="switchTab(event, 'statistiques')">📈 Statistiques IIBA</button>
+        </div>
+
+        <div class="content">
+            <!-- TAB 1: QUESTIONNAIRE -->
+            <div id="questionnaire" class="tab-content active">
+                <form id="femaForm">
+                    <!-- PROFIL ORGANISATION -->
+                    <div class="form-section">
+                        <h2 class="section-title">📌 ÉTAPE 1 : PROFIL DE VOTRE ORGANISATION</h2>
+                        <p style="margin-bottom: 20px; color: #666;">Ces informations permettront de contextualiser vos recommandations</p>
+
+                        <div class="form-group">
+                            <label>Type d'organisation *</label>
+                            <select name="orgType" required>
+                                <option value="">-- Sélectionnez --</option>
+                                <option value="tpe">TPE/PME (< 50 employés)</option>
+                                <option value="eti">ETI (50-500 employés)</option>
+                                <option value="ge">Grande Entreprise (>500 employés)</option>
+                                <option value="admin">Administration Publique</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Secteur d'activité *</label>
+                            <select name="secteur" required>
+                                <option value="">-- Sélectionnez --</option>
+                                <option value="agriculture">Agriculture</option>
+                                <option value="sante">Santé</option>
+                                <option value="finance">Finance/Assurance</option>
+                                <option value="education">Éducation</option>
+                                <option value="telecoms">Télécommunications</option>
+                                <option value="it">IT/Tech</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="transport">Transport</option>
+                                <option value="energie">Énergie</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Budget annuel dédié à la Data *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="budget1" name="budget" value="none" required>
+                                    <label for="budget1">&lt; 5M FCFA</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="budget2" name="budget" value="low">
+                                    <label for="budget2">20-100M FCFA</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="budget3" name="budget" value="high">
+                                    <label for="budget3">&gt; 100M FCFA</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="budget4" name="budget" value="unknown">
+                                    <label for="budget4">Je ne sais pas</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6 AXES -->
+                    <div id="axesContainer"></div>
+
+                    <div class="buttons">
+                        <button type="submit" class="btn-primary">✓ Soumettre & Voir Résultats</button>
+                        <button type="reset" class="btn-secondary">↺ Réinitialiser</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- TAB 2: RÉSULTATS -->
+            <div id="resultats" class="tab-content">
+                <div class="results-container">
+                    <div class="profile-summary">
+                        <h3>👤 Profil Évaluant</h3>
+                        <div class="profile-item">
+                            <span>Organisation :</span>
+                            <strong id="resultOrgType">-</strong>
+                        </div>
+                        <div class="profile-item">
+                            <span>Secteur :</span>
+                            <strong id="resultSecteur">-</strong>
+                        </div>
+                        <div class="profile-item">
+                            <span>Budget Data :</span>
+                            <strong id="resultBudget">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="score-card">
+                        <h3>🎯 SCORE GLOBAL</h3>
+                        <div class="score-display">
+                            <div>
+                                <div class="score-value" id="scoreGlobal">0.0</div>
+                                <div style="font-size: 0.9em; color: #666;">/5.0</div>
+                            </div>
+                            <div class="score-bar">
+                                <div class="score-fill" id="scoreBarFill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div id="levelBadge" class="level-badge level-1">NIVEAU 1 : Initial</div>
+                    </div>
+
+                    <div class="score-card">
+                        <h3>📊 DÉTAIL PAR AXE</h3>
+                        <div id="axesScores"></div>
+                    </div>
+
+                    <div class="score-card">
+                        <h3>📈 BENCHMARK COMPARATIF</h3>
+                        <div class="benchmark-section">
+                            <div class="benchmark-item">
+                                <span>Votre score :</span>
+                                <strong id="benchYour">0.0/5</strong>
+                            </div>
+                            <div class="benchmark-item">
+                                <span>Moyenne (votre catégorie) :</span>
+                                <strong id="benchCategory">-</strong>
+                            </div>
+                            <div class="benchmark-item">
+                                <span>Position vs catégorie :</span>
+                                <strong id="benchPosition">-</strong>
+                            </div>
+                            <div class="benchmark-item">
+                                <span>Benchmark secteur :</span>
+                                <strong id="benchSector">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="score-card">
+                        <h3>🎯 RECOMMANDATIONS PRIORITAIRES</h3>
+                        <div id="recommendationsContainer"></div>
+                    </div>
+
+                    <div class="score-card">
+                        <h3>🗺️ ROADMAP 12 MOIS</h3>
+                        <div id="roadmapContainer"></div>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="btn-print" onclick="window.print()">🖨️ Imprimer le Rapport</button>
+                        <button class="btn-secondary" onclick="downloadPDF()">⬇️ Télécharger PDF</button>
+                        <button class="btn-primary" onclick="switchTab(null, 'questionnaire')">↩️ Retour Questionnaire</button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding: 40px; color: #999;">
+                    <p>Complétez d'abord le questionnaire pour voir vos résultats</p>
+                </div>
+            </div>
+
+            <!-- TAB 3: STATISTIQUES IIBA -->
+            <div id="statistiques" class="tab-content">
+                <h2 style="color: var(--primary); margin-bottom: 20px;">📊 Statistiques Sondage IIBA Cameroun</h2>
+                <p style="margin-bottom: 30px; color: #666;">Basé sur l'analyse de <strong>971 profils data</strong> sur LinkedIn et le sondage national IIBA</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">971</div>
+                        <div class="stat-label">Profils Data Cameroun</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">63%</div>
+                        <div class="stat-label">Sans budget data</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">66%</div>
+                        <div class="stat-label">Données de mauvaise qualité</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18%</div>
+                        <div class="stat-label">Utilisent systématiquement</div>
+                    </div>
+                </div>
+
+                <div class="chart">
+                    <h4>📍 TOP 10 POSTES DATA AU CAMEROUN</h4>
+                    <div class="bar-item">
+                        <div class="bar-label">Data Analyst</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 38%;">38.1%</div>
+                        </div>
+                        <div class="bar-value">370</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Data Scientist</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 26%;">25.7%</div>
+                        </div>
+                        <div class="bar-value">250</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Business Intelligence</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 7%;">7.0%</div>
+                        </div>
+                        <div class="bar-value">68</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Data Manager</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 5.8%;">5.8%</div>
+                        </div>
+                        <div class="bar-value">56</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Data Engineer</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 4.7%;">4.7%</div>
+                        </div>
+                        <div class="bar-value">46</div>
+                    </div>
+                </div>
+
+                <div class="chart">
+                    <h4>🏢 SECTEURS MOTEURS</h4>
+                    <div class="bar-item">
+                        <div class="bar-label">IT/Tech</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 45%;">Leader</div>
+                        </div>
+                        <div class="bar-value">45%</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Télécoms</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 25%;">25%</div>
+                        </div>
+                        <div class="bar-value">25%</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Banque/Finance</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 18%;">18%</div>
+                        </div>
+                        <div class="bar-value">18%</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Autres</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 12%;">12%</div>
+                        </div>
+                        <div class="bar-value">12%</div>
+                    </div>
+                </div>
+
+                <div class="chart">
+                    <h4>📊 MATURITÉ MOYENNE PAR CATÉGORIE</h4>
+                    <div class="bar-item">
+                        <div class="bar-label">TPE/PME</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 38%;">1.8/5</div>
+                        </div>
+                        <div class="bar-value">1.8</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">ETI</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 54%;">2.7/5</div>
+                        </div>
+                        <div class="bar-value">2.7</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Grandes Entreprises</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 68%;">3.4/5</div>
+                        </div>
+                        <div class="bar-value">3.4</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Administration</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 48%;">2.4/5</div>
+                        </div>
+                        <div class="bar-value">2.4</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label" style="font-weight: bold;">MOYENNE NATIONALE</div>
+                        <div class="bar-container" style="background: #fff3e0;">
+                            <div class="bar-fill" style="width: 53%; background: var(--secondary);">2.65/5</div>
+                        </div>
+                        <div class="bar-value" style="font-weight: bold;">2.65</div>
+                    </div>
+                </div>
+
+                <div class="chart">
+                    <h4>📈 MATURITÉ PAR SECTEUR</h4>
+                    <div class="bar-item">
+                        <div class="bar-label">IT/Tech</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 64%;">3.2/5</div>
+                        </div>
+                        <div class="bar-value">3.2</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Télécoms</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 60%;">3.0/5</div>
+                        </div>
+                        <div class="bar-value">3.0</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Banque/Finance</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 56%;">2.8/5</div>
+                        </div>
+                        <div class="bar-value">2.8</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Commerce</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 46%;">2.3/5</div>
+                        </div>
+                        <div class="bar-value">2.3</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Santé</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 42%;">2.1/5</div>
+                        </div>
+                        <div class="bar-value">2.1</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Agriculture</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 36%;">1.8/5</div>
+                        </div>
+                        <div class="bar-value">1.8</div>
+                    </div>
+                </div>
+
+                <div class="chart">
+                    <h4>🌍 COMPARAISON INTERNATIONALE</h4>
+                    <div class="bar-item">
+                        <div class="bar-label">Europe</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 82%;">4.1/5</div>
+                        </div>
+                        <div class="bar-value">4.1</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Afrique du Sud</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 72%;">3.6/5</div>
+                        </div>
+                        <div class="bar-value">3.6</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">MENA</div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width: 68%;">3.4/5</div>
+                        </div>
+                        <div class="bar-value">3.4</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label" style="font-weight: bold; color: var(--primary);">Cameroun</div>
+                        <div class="bar-container" style="background: #ffebee;">
+                            <div class="bar-fill" style="width: 53%; background: var(--warning);">2.65/5</div>
+                        </div>
+                        <div class="bar-value" style="font-weight: bold; color: var(--warning);">2.65</div>
+                    </div>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                    <h4 style="color: #1976d2; margin-bottom: 10px;">💡 INSIGHT CLÉ</h4>
+                    <p>Le Cameroun a <strong>3-4 ans de retard</strong> sur l'Europe en matière de maturité data, mais dispose d'une <strong>opportunité immédiate</strong> de rattrapage via des investissements data-intelligents.</p>
+                    <p style="margin-top: 10px;">En alignant IT/Tech et Télécoms (leaders nationaux), le secteur public pourrait rapidement passer de 2.65/5 à 3.5+/5.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA DÉFINITION
+        const axes = [
+            {
+                name: "Gouvernance & Vision",
+                icon: "🏛️",
+                color: "#2c3e50",
+                questions: [
+                    {
+                        id: "g1",
+                        text: "Les décisions stratégiques importantes sont-elles basées sur des données fiables ?",
+                        context: "64% des décideurs camerounais jugent la donnée essentielle, mais seuls 18% l'utilisent systématiquement"
+                    },
+                    {
+                        id: "g2",
+                        text: "Existe-t-il une direction ou personne responsable de la stratégie données ?",
+                        context: "Un CDO (Chief Data Officer) ou équivalent doit piloter la stratégie data"
+                    },
+                    {
+                        id: "g3",
+                        text: "Avez-vous une politique documentée sur la gouvernance des données ?",
+                        context: "Politique d'accès, de qualité, de conformité, écrite et appliquée"
+                    },
+                    {
+                        id: "g4",
+                        text: "Le budget alloué à la donnée est-il clairement planifié ?",
+                        context: "Budgétisation structurée vs improvisée (63% des orgs n'ont aucun budget)"
+                    }
+                ]
+            },
+            {
+                name: "Culture & Compétences",
+                icon: "👥",
+                color: "#27ae60",
+                questions: [
+                    {
+                        id: "c1",
+                        text: "Existe-t-il une personne désignée comme 'Champion Data' ou 'Lead Data' ?",
+                        context: "Quelqu'un doit être responsable d'évangéliser et structurer la donnée"
+                    },
+                    {
+                        id: "c2",
+                        text: "La direction promeut-elle activement la 'data literacy' ?",
+                        context: "Formations, communications, exemples concrets de valeur data"
+                    },
+                    {
+                        id: "c3",
+                        text: "Avez-vous au moins une personne compétente pour analyser les données ?",
+                        context: "Data Analyst, Business Analyst, ou équivalent"
+                    },
+                    {
+                        id: "c4",
+                        text: "Les collaborateurs comprennent-ils l'importance de la qualité des données ?",
+                        context: "Sensibilisation des producteurs de données"
+                    }
+                ]
+            },
+            {
+                name: "Qualité & Organisation",
+                icon: "✓",
+                color: "#e74c3c",
+                questions: [
+                    {
+                        id: "q1",
+                        text: "Êtes-vous confiant dans la qualité de vos données critiques ?",
+                        context: "66% des organisations camerounaises jugent leurs données de mauvaise qualité"
+                    },
+                    {
+                        id: "q2",
+                        text: "Vos données métier sont-elles centralisées ou éparpillées en silos ?",
+                        context: "Centralisées = un référent ; Éparpillées = Excel, emails, serveurs différents"
+                    },
+                    {
+                        id: "q3",
+                        text: "Avez-vous des processus pour nettoyer et valider les données ?",
+                        context: "Suppression doublons, vérification complétude, correction erreurs"
+                    },
+                    {
+                        id: "q4",
+                        text: "Vos données importantes sont-elles documentées ?",
+                        context: "Définition, origine, responsable, fréquence mise à jour"
+                    }
+                ]
+            },
+            {
+                name: "Outils & Infrastructure",
+                icon: "⚙️",
+                color: "#f39c12",
+                questions: [
+                    {
+                        id: "t1",
+                        text: "Utilisez-vous des outils BI (Power BI, Tableau, Looker) au-delà d'Excel ?",
+                        context: "95% des PME camerounaises utilisent Excel comme outil principal"
+                    },
+                    {
+                        id: "t2",
+                        text: "Vos données critiques sont-elles stockées de manière sécurisée ?",
+                        context: "Serveur centralisé avec sauvegarde, pas sur ordinateurs locaux"
+                    },
+                    {
+                        id: "t3",
+                        text: "Utilisez-vous le Cloud (AWS, Azure, Google Cloud) ?",
+                        context: "Infrastructure moderne vs serveurs on-site non mutualisés"
+                    },
+                    {
+                        id: "t4",
+                        text: "Avez-vous accès à une connexion internet stable et suffisante ?",
+                        context: "Infrastructure de base pour supporter data"
+                    }
+                ]
+            },
+            {
+                name: "Sécurité & Conformité",
+                icon: "🔒",
+                color: "#8e44ad",
+                questions: [
+                    {
+                        id: "s1",
+                        text: "Connaissez-vous la Loi 2024/017 sur la protection des données ?",
+                        context: "40% des organisations camerounaises ignorent cette loi"
+                    },
+                    {
+                        id: "s2",
+                        text: "Avez-vous des protections techniques (chiffrage, contrôle d'accès) ?",
+                        context: "Sécurisation des données sensibles (clients, finances)"
+                    },
+                    {
+                        id: "s3",
+                        text: "Les collaborateurs reçoivent-ils une sensibilisation cybersécurité ?",
+                        context: "Formation régulière à la sécurité, phishing, bonnes pratiques"
+                    },
+                    {
+                        id: "s4",
+                        text: "Avez-vous une politique de consentement et conservation des données ?",
+                        context: "Durée de conservation avant suppression"
+                    }
+                ]
+            },
+            {
+                name: "Exploitation & Valeur",
+                icon: "💰",
+                color: "#2980b9",
+                questions: [
+                    {
+                        id: "v1",
+                        text: "Utilisez-vous des tableaux de bord pour suivre vos KPIs métier ?",
+                        context: "Dashboards interactifs vs rapports statiques en PDF"
+                    },
+                    {
+                        id: "v2",
+                        text: "Avez-vous mesuré l'impact business de vos initiatives data ?",
+                        context: "Économies de coûts, augmentation chiffre d'affaires, efficacité"
+                    },
+                    {
+                        id: "v3",
+                        text: "Utilisez-vous l'analyse prédictive ou envisagez-vous de le faire ?",
+                        context: "Prévoir désaffection client, anticiper demande"
+                    },
+                    {
+                        id: "v4",
+                        text: "Avez-vous amélioré un produit/service grâce aux données ?",
+                        context: "Innovation ou optimisation basée sur insights data"
+                    }
+                ]
+            }
+        ];
+
+        const benchmarks = {
+            tpe: { name: "TPE/PME", avg: 1.8 },
+            eti: { name: "ETI", avg: 2.7 },
+            ge: { name: "Grande Entreprise", avg: 3.4 },
+            admin: { name: "Administration", avg: 2.4 },
+            autre: { name: "Autre", avg: 2.65 }
+        };
+
+        const sectorBenchmarks = {
+            agriculture: 1.8,
+            sante: 2.1,
+            finance: 2.8,
+            education: 2.2,
+            telecoms: 3.0,
+            it: 3.2,
+            commerce: 2.3,
+            transport: 2.1,
+            energie: 2.5,
+            autre: 2.65
+        };
+
+        const recommendations = {
+            short: {
+                1: ["Désigner un 'Champion Data'", "Lancer un 'Quick Win' (nettoyer 1 dataset)", "Former leadership (1 demi-jour)", "Sécuriser l'essentiel (accès, sauvegarde)"],
+                2: ["Mettre en place Data Warehouse/DWH", "Structurer équipe (2-5 personnes)", "Créer Comité Data (mensuel)", "Gouvernance formelle écrite"]
+            },
+            medium: {
+                1: ["Déployer BI (Power BI/Tableau)", "Recruter Data Analyst (1 poste)", "Aligner ISO 27001", "Former équipe"],
+                2: ["Gouvernance Mesh (responsabilisation métiers)", "Créer Centre d'Excellence", "Architecture cloud-native", "Projets AI/ML pilot"]
+            },
+            long: {
+                1: ["Évaluer ROI data", "Optimiser processus", "Monétiser données", "Innover produits"],
+                2: ["Data as a Product", "Sécurité avancée (SOC)", "Certification complète", "Innovation continue"]
+            }
+        };
+
+        // Générer le formulaire
+        function renderForm() {
+            const container = document.getElementById('axesContainer');
+            axes.forEach(axis => {
+                const section = document.createElement('div');
+                section.className = 'form-section';
+                section.innerHTML = `
+                    <h3 class="section-title" style="color: ${axis.color};">${axis.icon} ${axis.name}</h3>
+                `;
+                
+                axis.questions.forEach((q, idx) => {
+                    const group = document.createElement('div');
+                    group.className = 'form-group';
+                    group.innerHTML = `
+                        <label><strong>${idx + 1}. ${q.text}</strong></label>
+                        <div class="question-context">${q.context}</div>
+                        <div class="scale-labels">
+                            <span>1 = Absent</span>
+                            <span>2 = Rarement</span>
+                            <span>3 = Parfois</span>
+                            <span>4 = Souvent</span>
+                            <span>5 = Systématique</span>
+                        </div>
+                        <div class="radio-group" style="margin-top: 10px;">
+                            <div class="radio-option">
+                                <input type="radio" id="${q.id}_1" name="${q.id}" value="1" required>
+                                <label for="${q.id}_1">1</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="${q.id}_2" name="${q.id}" value="2">
+                                <label for="${q.id}_2">2</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="${q.id}_3" name="${q.id}" value="3">
+                                <label for="${q.id}_3">3</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="${q.id}_4" name="${q.id}" value="4">
+                                <label for="${q.id}_4">4</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="${q.id}_5" name="${q.id}" value="5">
+                                <label for="${q.id}_5">5</label>
+                            </div>
+                        </div>
+                    `;
+                    section.appendChild(group);
+                });
+                
+                container.appendChild(section);
+            });
+        }
+
+        // Gérer soumission du formulaire
+        document.getElementById('femaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateResults();
+            switchTab(null, 'resultats');
+        });
+
+        function calculateResults() {
+            const form = document.getElementById('femaForm');
+            const formData = new FormData(form);
+
+            const orgType = formData.get('orgType');
+            const secteur = formData.get('secteur');
+            const budget = formData.get('budget');
+
+            // Récupérer les scores
+            const scores = {};
+            axes.forEach(axis => {
+                let axisTotal = 0;
+                axis.questions.forEach(q => {
+                    axisTotal += parseInt(formData.get(q.id)) || 0;
+                });
+                scores[axis.name] = axisTotal / axis.questions.length;
+            });
+
+            // Score global
+            const globalScore = Object.values(scores).reduce((a, b) => a + b, 0) / axes.length;
+
+            // Déterminer le niveau
+            let level, levelName, levelColor;
+            if (globalScore < 1.5) {
+                level = 1;
+                levelName = "INITIAL - On improvise";
+                levelColor = "level-1";
+            } else if (globalScore < 2.5) {
+                level = 2;
+                levelName = "ÉMERGENT - On sait que c'est important";
+                levelColor = "level-2";
+            } else if (globalScore < 3.5) {
+                level = 3;
+                levelName = "STRUCTURATION - On a commencé";
+                levelColor = "level-3";
+            } else if (globalScore < 4.5) {
+                level = 4;
+                levelName = "MAÎTRISÉ - La donnée guide nos décisions";
+                levelColor = "level-4";
+            } else {
+                level = 5;
+                levelName = "RÉFÉRENCE - Levier stratégique";
+                levelColor = "level-5";
+            }
+
+            // Afficher les résultats
+            displayResults(formData, scores, globalScore, level, levelName, levelColor, orgType, secteur, budget);
+        }
+
+        function displayResults(formData, scores, globalScore, level, levelName, levelColor, orgType, secteur, budget) {
+            const resultsContainer = document.querySelector('.results-container');
+            resultsContainer.style.display = 'block';
+
+            // Profil
+            document.getElementById('resultOrgType').textContent = benchmarks[orgType]?.name || orgType;
+            document.getElementById('resultSecteur').textContent = document.querySelector(`option[value="${secteur}"]`).textContent;
+            
+            const budgetText = {
+                'none': '< 5M FCFA',
+                'low': '20-100M FCFA',
+                'high': '> 100M FCFA',
+                'unknown': 'Inconnu'
+            };
+            document.getElementById('resultBudget').textContent = budgetText[budget];
+
+            // Score global
+            document.getElementById('scoreGlobal').textContent = globalScore.toFixed(1);
+            document.getElementById('scoreBarFill').style.width = (globalScore / 5 * 100) + '%';
+            const badge = document.getElementById('levelBadge');
+            badge.textContent = `NIVEAU ${level} : ${levelName}`;
+            badge.className = `level-badge ${levelColor}`;
+
+            // Détail axes
+            const axesScoresDiv = document.getElementById('axesScores');
+            axesScoresDiv.innerHTML = '';
+            axes.forEach(axis => {
+                const score = scores[axis.name];
+                const div = document.createElement('div');
+                div.style.marginBottom = '15px';
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong>${axis.icon} ${axis.name}</strong>
+                        <span style="font-weight: bold;">${score.toFixed(1)}/5</span>
+                    </div>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${(score/5*100)}%; background: ${axis.color};"></div>
+                    </div>
+                `;
+                axesScoresDiv.appendChild(div);
+            });
+
+            // Benchmark
+            const categoryAvg = benchmarks[orgType]?.avg || 2.65;
+            const sectorAvg = sectorBenchmarks[secteur] || 2.65;
+            const position = ((globalScore - categoryAvg) / categoryAvg * 100).toFixed(1);
+            
+            document.getElementById('benchYour').textContent = globalScore.toFixed(2) + '/5';
+            document.getElementById('benchCategory').textContent = categoryAvg.toFixed(1) + '/5';
+            document.getElementById('benchPosition').textContent = (position > 0 ? '+' : '') + position + '% vs pairs';
+            document.getElementById('benchSector').textContent = sectorAvg.toFixed(1) + '/5';
+
+            // Recommandations
+            const recommContainer = document.getElementById('recommendationsContainer');
+            recommContainer.innerHTML = '';
+            
+            if (recommendations.short[Math.ceil(level)]) {
+                recommendations.short[Math.ceil(level)].forEach(rec => {
+                    const div = document.createElement('div');
+                    div.className = 'recommendation';
+                    div.innerHTML = `<h4>⚡ Court terme (3 mois)</h4><p>${rec}</p>`;
+                    recommContainer.appendChild(div);
+                });
+            }
+
+            if (recommendations.medium[Math.ceil(level)]) {
+                recommendations.medium[Math.ceil(level)].forEach(rec => {
+                    const div = document.createElement('div');
+                    div.className = 'recommendation medium';
+                    div.innerHTML = `<h4>🔄 Moyen terme (6-12 mois)</h4><p>${rec}</p>`;
+                    recommContainer.appendChild(div);
+                });
+            }
+
+            if (recommendations.long[Math.ceil(level)]) {
+                recommendations.long[Math.ceil(level)].forEach(rec => {
+                    const div = document.createElement('div');
+                    div.className = 'recommendation long';
+                    div.innerHTML = `<h4>📈 Long terme (12-24 mois)</h4><p>${rec}</p>`;
+                    recommContainer.appendChild(div);
+                });
+            }
+
+            // Roadmap
+            const budgets = {
+                1: { short: "2-5M", medium: "15-30M", long: "20-50M" },
+                2: { short: "5-10M", medium: "40-80M", long: "50-100M" },
+                3: { short: "10-20M", medium: "80-150M", long: "100-200M" },
+                4: { short: "20-50M", medium: "150-300M", long: "200-500M" },
+                5: { short: "50-100M", medium: "300-500M", long: "500M+" }
+            };
+
+            const roadmapDiv = document.getElementById('roadmapContainer');
+            roadmapDiv.innerHTML = `
+                <div class="benchmark-section">
+                    <div class="benchmark-item">
+                        <span><strong>T1 (3 mois) - Court terme</strong></span>
+                        <strong>${budgets[level].short} FCFA</strong>
+                    </div>
+                    <div class="benchmark-item">
+                        <span><strong>T2-T3 (6-12 mois) - Moyen terme</strong></span>
+                        <strong>${budgets[level].medium} FCFA</strong>
+                    </div>
+                    <div class="benchmark-item">
+                        <span><strong>T4-2ans - Long terme</strong></span>
+                        <strong>${budgets[level].long} FCFA</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(event, tabName) {
+            if (event) event.preventDefault();
+
+            // Masquer tous les onglets
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Désactiver tous les boutons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Afficher l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+
+            // Activer le bouton
+            event?.target?.classList.add('active');
+            if (!event) {
+                document.querySelector(`[onclick="switchTab(event, '${tabName}')"]`)?.classList.add('active');
+            }
+        }
+
+        function downloadPDF() {
+            alert('Fonction PDF disponible bientôt. Utilisez "Imprimer" pour télécharger en PDF.');
+        }
+
+        // Initialiser
+        renderForm();
+    </script>
+</body>
+</html>
