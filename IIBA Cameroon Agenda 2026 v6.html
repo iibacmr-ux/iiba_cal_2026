@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda IIBA Cameroon 2026 - Calendrier Interactif</title>
+    <style>
+        :root {
+            --primary: #208094;
+            --secondary: #FCC944;
+            --accent: #22C55E;
+            --background: #FFFCF9;
+            --surface: #FFFFFF;
+            --text-primary: #134252;
+            --text-secondary: #627C88;
+            --border: #E8DCC8;
+            --dark: #1F2937;
+            --light-gray: #F5F5F5;
+            --study: #2160C4;
+            --meetup: #22C55E;
+            --training: #9333EA;
+            --webinar: #06B6D4;
+            --external: #EF4444;
+            --recognition: #EAB308;
+            --strategic: #1F2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a5f73 100%);
+            color: white;
+            padding: 28px 20px;
+            box-shadow: 0 4px 12px rgba(32, 128, 148, 0.2);
+            margin-bottom: 28px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-title {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            font-size: 13px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .header-version {
+            font-size: 11px;
+            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ========== MAIN LAYOUT ========== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        /* ========== ACTION BUTTONS ========== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-action:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-action.primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(32, 128, 148, 0.25);
+        }
+
+        .btn-action.primary:hover {
+            background: #1a5f73;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 128, 148, 0.35);
+        }
+
+        .btn-action.secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-action.secondary:hover {
+            background: var(--light-gray);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-action.warning {
+            background: rgba(249, 115, 22, 0.1);
+            color: #F97316;
+            border: 1.5px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-action.warning:hover {
+            background: #F97316;
+            color: white;
+        }
+
+        .file-input-wrapper input[type=file] {
+            display: none;
+        }
+
+        /* ========== FILTER TABS ========== */
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .filters::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .filters::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .filters::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 200ms;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(32, 128, 148, 0.05);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-count {
+            font-size: 11px;
+            opacity: 0.75;
+            font-weight: 600;
+        }
+
+        /* ========== CALENDAR CONTAINER ========== */
+        .calendar-container {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(19, 66, 82, 0.08);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .month-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 200ms;
+            color: var(--text-primary);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* ========== CALENDAR GRID ========== */
+        .calendar-grid {
+            margin-top: 24px;
+        }
+
+        .weekday-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .weekday-header div {
+            padding: 12px 8px;
+            background: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .day {
+            aspect-ratio: 1 / 1.3;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            background: var(--surface);
+            min-height: 120px;
+            cursor: pointer;
+            transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 200ms;
+        }
+
+        .day:hover::before {
+            opacity: 1;
+        }
+
+        .day:hover {
+            border-color: var(--primary);
+            box-shadow: 0 6px 16px rgba(32, 128, 148, 0.15);
+            transform: translateY(-4px);
+            background: rgba(32, 128, 148, 0.02);
+        }
+
+        .day.other-month {
+            background: var(--light-gray);
+            opacity: 0.4;
+        }
+
+        .day.today {
+            background: rgba(34, 197, 94, 0.08);
+            border: 2px solid var(--accent);
+            font-weight: 700;
+        }
+
+        .day-number {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .day-events {
+            font-size: 10px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .day-event-item {
+            background: var(--primary);
+            color: white;
+            padding: 3px 5px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 9px;
+            line-height: 1.2;
+            font-weight: 500;
+            transition: all 150ms;
+        }
+
+        .day-event-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .day-event-item.study {
+            background: var(--study);
+        }
+
+        .day-event-item.meetup {
+            background: var(--meetup);
+        }
+
+        .day-event-item.training {
+            background: var(--training);
+        }
+
+        .day-event-item.webinar {
+            background: var(--webinar);
+        }
+
+        .day-event-item.external {
+            background: var(--external);
+        }
+
+        .day-event-item.recognition {
+            background: var(--recognition);
+        }
+
+        .day-event-item.strategic {
+            background: var(--strategic);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stats-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(19, 66, 82, 0.08);
+            transition: all 200ms;
+        }
+
+        .stats-box:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(32, 128, 148, 0.12);
+        }
+
+        .stats-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        /* ========== LEGEND ========== */
+        .legend-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(19, 66, 82, 0.08);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .legend-text {
+            flex: 1;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--surface);
+            border-top: 2px solid var(--border);
+            padding: 24px 20px;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer-info {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .footer-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .footer-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 10px;
+        }
+
+        /* ========== MODAL ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 200ms ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--light-gray);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 200ms;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .modal-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: 0.6px;
+        }
+
+        .modal-section-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .calendar-days {
+                gap: 4px;
+            }
+
+            .day {
+                min-height: 90px;
+                padding: 6px;
+            }
+
+            .day-number {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+
+            .day-event-item {
+                font-size: 8px;
+                padding: 2px 3px;
+            }
+
+            .container {
+                padding: 0 12px 28px;
+            }
+
+            .calendar-container {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 20px 16px;
+            }
+
+            .action-buttons {
+                gap: 6px;
+            }
+
+            .btn-action {
+                padding: 9px 12px;
+                font-size: 12px;
+                gap: 4px;
+            }
+
+            .header-content {
+                gap: 12px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .tagline {
+                font-size: 12px;
+            }
+
+            .month-title {
+                font-size: 20px;
+            }
+        }
+
+        @media print {
+            .action-buttons,
+            .filters,
+            .sidebar,
+            .header {
+                display: none;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .day {
+                break-inside: avoid;
+            }
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== HEADER ========== -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <div class="logo">📅 IIBA Cameroon 🇨🇲</div>
+                <div class="tagline">Agenda 2026 • Planifier • Engager • Transformer</div>
+            </div>
+            <div class="header-version">v2.1 • Fixed Icons • 24 Déc 2025</div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="container">
+        <!-- MAIN CALENDAR -->
+        <main>
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons">
+                <button class="btn-action primary" onclick="exportToXLS()">📊 Exporter XLS</button>
+                <label class="btn-action primary file-input-wrapper" style="cursor: pointer;">
+                    📋 Importer XLS
+                    <input type="file" id="importFile" accept=".xlsx,.xls" onchange="importFromXLS()">
+                </label>
+                <button class="btn-action secondary" onclick="printCalendar()">🖨️ Imprimer</button>
+                <button class="btn-action secondary" onclick="shareAgenda()">📢 Partager</button>
+                <button class="btn-action warning" onclick="resetData()">🔄 Réinitialiser</button>
+            </div>
+
+            <!-- FILTER TABS -->
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterEvents('all')">
+                    Tous <span class="filter-count">94+</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('study')">
+                    Groupes <span class="filter-count">3</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('meetup')">
+                    Rencontres <span class="filter-count">9</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('training')">
+                    BPMN <span class="filter-count">4</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('webinar')">
+                    Webinars <span class="filter-count">12</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('external')">
+                    Externes <span class="filter-count">8</span>
+                </button>
+                <button class="filter-btn" onclick="filterEvents('recognition')">
+                    Reconnaissance <span class="filter-count">12</span>
+                </button>
+            </div>
+
+            <!-- CALENDAR -->
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="month-title" id="monthTitle">Janvier 2026</div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="previousMonth()" title="Mois précédent">←</button>
+                        <button class="nav-btn" onclick="todayMonth()" title="Aujourd'hui">☆</button>
+                        <button class="nav-btn" onclick="nextMonth()" title="Mois suivant">→</button>
+                    </div>
+                </div>
+
+                <!-- CALENDAR GRID -->
+                <div class="calendar-grid">
+                    <div class="weekday-header">
+                        <div>Dim</div>
+                        <div>Lun</div>
+                        <div>Mar</div>
+                        <div>Mer</div>
+                        <div>Jeu</div>
+                        <div>Ven</div>
+                        <div>Sam</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <!-- STATS BOX -->
+            <div class="stats-box">
+                <div class="stats-title">📊 Statistiques 2026</div>
+                <div class="stat-item">
+                    <span class="stat-label">Événements Total</span>
+                    <span class="stat-value">94+</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Groupes d'Études</span>
+                    <span class="stat-value">3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Rencontres BA</span>
+                    <span class="stat-value">9</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Webinaires</span>
+                    <span class="stat-value">12</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Participants</span>
+                    <span class="stat-value">950+</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Revenus Prévus</span>
+                    <span class="stat-value">31.7M FCFA</span>
+                </div>
+            </div>
+
+            <!-- COLOR LEGEND -->
+            <div class="legend-box">
+                <div class="stats-title">🎨 Types d'Événements</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--study);"></div>
+                    <span class="legend-text">Groupe d'Étude</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--meetup);"></div>
+                    <span class="legend-text">Rencontre BA</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--training);"></div>
+                    <span class="legend-text">Formation BPMN</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--webinar);"></div>
+                    <span class="legend-text">Webinaire</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--external);"></div>
+                    <span class="legend-text">Événement Externe</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--recognition);"></div>
+                    <span class="legend-text">Reconnaissance</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--strategic);"></div>
+                    <span class="legend-text">Stratégique</span>
+                </div>
+            </div>
+
+            <!-- KEY MILESTONE -->
+            <div class="stats-box" style="background: rgba(34, 197, 94, 0.08); border-color: var(--accent);">
+                <div class="stats-title" style="color: var(--accent);">⭐ Jalon Clé</div>
+                <div style="font-size: 12px; line-height: 1.8; color: var(--text-primary);">
+                    <strong>REC GECAM</strong><br/>
+                    25-26 Mars 2026<br/>
+                    Yaoundé 🏛️<br/>
+                    <span style="color: var(--text-secondary); font-size: 11px;">500+ participants • Stand IIBA</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-info">
+            <div class="footer-info-item">
+                <span class="footer-label">VERSION</span>
+                <span>v2.1 - Icons Fixed</span>
+            </div>
+            <div class="footer-info-item">
+                <span class="footer-label">MIS À JOUR</span>
+                <span>24 Décembre 2025</span>
+            </div>
+            <div class="footer-info-item">
+                <span class="footer-label">STATUT</span>
+                <span>✅ Production Ready</span>
+            </div>
+        </div>
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+            📧 Questions: <strong>agenda@iiba-cameroon.org</strong>
+        </div>
+    </div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ========== FONCTION POUR ASSIGNER DES ICONS PAR TYPE ==========
+        function getDefaultIconForType(type) {
+            const iconMap = {
+                study: '📚',
+                meetup: '🤝',
+                training: '🛠️',
+                webinar: '📢',
+                external: '🌐',
+                recognition: '⭐',
+                strategic: '🎯'
+            };
+            return iconMap[type] || '📌';
+        }
+
+        // ========== DONNÉES PAR DÉFAUT ==========
+        const defaultEventsData = [
+            { id: 1, name: "Mini-Congrès 2025", date: "2025-12-28", time: "14h00", type: "strategic", icon: "🎯", location: "Platinum Cocotiers", participants: { min: 50, max: 70 }, price: 0, status: "Confirmé", description: "Bilan 2025 + Lancement 2026", theme: "Bilan & Vision 2026", speakers: ["Eddy Fanga", "Florence Ndum"], registrationLink: "#" },
+            { id: 2, name: "Groupe d'Études Cohorte 1", date: "2026-01-13", time: "18h30", type: "study", icon: "📚", location: "Online + Présentiel", participants: { min: 30, max: 35 }, price: 230000, status: "Inscriptions Ouvertes", description: "Lancement officiel cohorte 1", theme: "Formation ECBA", speakers: ["Instructeurs IIBA"], registrationLink: "https://zoom.iiba-cameroon.org/cohorte1" },
+            { id: 3, name: "Livre Blanc GECAM", date: "2026-01-23", time: "09h00", type: "external", icon: "🌐", location: "Douala/Yaoundé", participants: { min: 80, max: 100 }, price: 0, status: "Planifié", description: "Mini-conférence + Networking", theme: "Données & Transformation", speakers: ["Eddy Fanga", "Florence Ndum"], registrationLink: "https://gecam-cameroon.org" },
+            { id: 4, name: "BA du Mois #1", date: "2026-01-22", time: "10h00", type: "recognition", icon: "⭐", location: "LinkedIn", participants: { min: 1, max: 1 }, price: 0, status: "Mensuel", description: "Reconnaissance d'un BA certifié", theme: "Visibilité & Reconnaissance", speakers: ["Community"], registrationLink: "https://linkedin.com/company/iiba-cameroon" },
+            { id: 5, name: "Ma vie de BA #1", date: "2026-01-08", time: "20h00", type: "webinar", icon: "📢", location: "Groupe WhatsApp", participants: { min: 50, max: 100 }, price: 0, status: "Mensuel", description: "Histoires de BAs certifiés", theme: "Partage d'Expériences", speakers: ["BA Certifiés"], registrationLink: "https://chat.whatsapp.com/iiba-cameroon" },
+            { id: 6, name: "Questions pour 1 BA #1", date: "2026-01-22", time: "20h30", type: "webinar", icon: "💬", location: "Groupe WhatsApp", participants: { min: 50, max: 100 }, price: 0, status: "Mensuel", description: "Séance Q&A interactive", theme: "Questions & Réponses", speakers: ["BA Expert"], registrationLink: "https://chat.whatsapp.com/iiba-cameroon" },
+            { id: 7, name: "Webinaire Gratuit: ECBA", date: "2026-01-15", time: "19h00", type: "webinar", icon: "🎓", location: "Zoom", participants: { min: 100, max: 200 }, price: 0, status: "Ouvert", description: "Préparation à l'examen ECBA", theme: "Préparation Examen", speakers: ["Instructeur IIBA"], registrationLink: "https://zoom.us/webinar/iiba-cameroon" },
+            { id: 8, name: "Cartographie BPMN Session 1", date: "2026-02-10", time: "19h00", type: "training", icon: "🛠️", location: "Online", participants: { min: 15, max: 20 }, price: 50000, status: "Inscriptions Ouvertes", description: "Mapping de processus - 4 sessions", theme: "Process Mapping BPMN", speakers: ["Expert BPMN"], registrationLink: "https://zoom.iiba-cameroon.org/bpmn-1" },
+            { id: 9, name: "BA Meet Up Présentiel 1", date: "2026-02-15", time: "15h00", type: "meetup", icon: "🤝", location: "Platinum Cocotiers", participants: { min: 25, max: 50 }, price: 5000, status: "Planification", description: "Gouvernance de la Donnée", theme: "Data Governance", speakers: ["GECAM", "ENEO"], registrationLink: "https://forms.iiba-cameroon.org/meetup1" },
+            { id: 10, name: "SUFAWE 2026", date: "2026-02-20", time: "08h00", type: "external", icon: "👩‍💼", location: "Douala", participants: { min: 50, max: 150 }, price: 0, status: "Confirmé", description: "Stand Up For African Women Entrepreneurs", theme: "Femmes Entrepreneures", speakers: ["Multi-secteur"], registrationLink: "https://sufawe.org" },
+            { id: 11, name: "Online BA Meet Up (EN)", date: "2026-02-25", time: "20h00", type: "meetup", icon: "💻", location: "Zoom", participants: { min: 30, max: 50 }, price: 0, status: "Ouvert", description: "Agile Analysis & BA", theme: "Agile Analysis", speakers: ["BA Expert"], registrationLink: "https://zoom.us/meeting/iiba-cameroon-en" },
+            { id: 12, name: "Masterclass GECAM #1", date: "2026-02-28", time: "10h00", type: "training", icon: "👨‍🏫", location: "GECAM", participants: { min: 80, max: 150 }, price: 0, status: "Planifié", description: "Données & Transformation Digitale", theme: "Digital Transformation", speakers: ["Experts GECAM"], registrationLink: "https://gecam-cameroon.org" },
+            { id: 13, name: "BA du Mois #2", date: "2026-02-22", time: "10h00", type: "recognition", icon: "⭐", location: "LinkedIn", participants: { min: 1, max: 1 }, price: 0, status: "Mensuel", description: "Spotlight BA certifié", theme: "Visibilité BA", speakers: ["Community"], registrationLink: "https://linkedin.com/company/iiba-cameroon" },
+            { id: 14, name: "Groupe d'Études Cohorte 2", date: "2026-05-12", time: "18h30", type: "study", icon: "📚", location: "Online + Présentiel", participants: { min: 25, max: 30 }, price: 230000, status: "Inscriptions Ouvertes", description: "Lancement mi-année", theme: "Formation ECBA", speakers: ["Instructeurs IIBA"], registrationLink: "https://zoom.iiba-cameroon.org/cohorte2" },
+            { id: 15, name: "BA Meet Up Présentiel 2", date: "2026-05-15", time: "15h00", type: "meetup", icon: "🤝", location: "ActivSpaces", participants: { min: 25, max: 50 }, price: 5000, status: "Planification", description: "Leadership & Architecture", theme: "Leadership & Architecture", speakers: ["BA Leaders"], registrationLink: "https://forms.iiba-cameroon.org/meetup2" },
+            { id: 16, name: "Groupe d'Études Cohorte 3 - 🎄 Noël", date: "2026-09-15", time: "18h30", type: "study", icon: "📚", location: "Online + Présentiel", participants: { min: 30, max: 40 }, price: 230000, status: "Inscriptions Ouvertes", description: "Certif avant Noël 🎄", theme: "Formation ECBA", speakers: ["Instructeurs IIBA"], registrationLink: "https://zoom.iiba-cameroon.org/cohorte3" },
+            { id: 17, name: "Cartographie BPMN Session 4", date: "2026-10-10", time: "19h00", type: "training", icon: "🛠️", location: "Online", participants: { min: 15, max: 20 }, price: 50000, status: "Planification", description: "Mapping avancé", theme: "Advanced BPMN", speakers: ["Expert BPMN"], registrationLink: "https://zoom.iiba-cameroon.org/bpmn-4" },
+            { id: 18, name: "BA Meet Up Présentiel 3", date: "2026-10-15", time: "15h00", type: "meetup", icon: "🤝", location: "Platinum", participants: { min: 25, max: 50 }, price: 5000, status: "Planification", description: "IA & Transformation Digitale", theme: "AI & Digital Transformation", speakers: ["Tech Experts"], registrationLink: "https://forms.iiba-cameroon.org/meetup3" },
+            { id: 19, name: "Congrès Annuel 2026 - 5 Ans 🎉", date: "2026-12-17", time: "09h00", type: "strategic", icon: "🎯", location: "Platinum", participants: { min: 150, max: 200 }, price: 15000, status: "Planification", description: "Célébration 5 ans IIBA Cameroon", theme: "Célébration & Achievements", speakers: ["Leadership IIBA"], registrationLink: "https://forms.iiba-cameroon.org/congress2026" },
+            { id: 20, name: "YouTube Channel - LAUNCH", date: "2026-12-17", time: "14h00", type: "strategic", icon: "🎬", location: "Online", participants: { min: 1000, max: 5000 }, price: 0, status: "Planification", description: "Lancement chaîne YouTube officielle", theme: "Channel Launch", speakers: ["IIBA Team"], registrationLink: "https://youtube.com/@iibacameroon" }
+        ];
+
+        // ÉTAT
+        let eventsData = [...defaultEventsData];
+        let currentMonth = new Date(2026, 0, 1);
+        let currentFilter = 'all';
+
+        // Charger depuis localStorage
+        function loadData() {
+            const saved = localStorage.getItem('iiba_events_2026');
+            if (saved) {
+                try {
+                    eventsData = JSON.parse(saved);
+                    // ✅ ENRICHIR les events importés avec des icons par défaut
+                    eventsData = eventsData.map(event => {
+                        if (!event.icon || String(event.icon).trim() === '' || String(event.icon).toLowerCase() === 'undefined') {
+                            event.icon = getDefaultIconForType(event.type);
+                        }
+                        return event;
+                    });
+                } catch (e) {
+                    console.error('Erreur chargement données:', e);
+                    eventsData = [...defaultEventsData];
+                }
+            }
+        }
+
+        // Sauvegarder dans localStorage
+        function saveData() {
+            localStorage.setItem('iiba_events_2026', JSON.stringify(eventsData));
+        }
+
+        // ========== RENDU CALENDRIER ==========
+        function renderCalendar() {
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+
+            // Titre
+            const monthName = new Date(year, month, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+            document.getElementById('monthTitle').textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+            // Calcul jours
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
+
+            // Jours mois précédent
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const dayNum = daysInPrevMonth - i;
+                const prevDate = new Date(year, month - 1, dayNum);
+                createDayElement(calendarDays, dayNum, prevDate, true);
+            }
+
+            // Jours mois courant
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                createDayElement(calendarDays, day, date, false);
+            }
+
+            // Jours mois suivant
+            const totalCells = calendarDays.children.length;
+            const remainingCells = 42 - totalCells;
+            for (let day = 1; day <= remainingCells; day++) {
+                const nextDate = new Date(year, month + 1, day);
+                createDayElement(calendarDays, day, nextDate, true);
+            }
+        }
+
+        function createDayElement(container, dayNum, date, isOtherMonth) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'day';
+            if (isOtherMonth) dayDiv.classList.add('other-month');
+
+            // Vérifier si aujourd'hui
+            const today = new Date();
+            if (date.toDateString() === today.toDateString()) {
+                dayDiv.classList.add('today');
+            }
+
+            // Numéro du jour
+            const dayNumberDiv = document.createElement('div');
+            dayNumberDiv.className = 'day-number';
+            dayNumberDiv.textContent = dayNum;
+
+            // Événements du jour
+            const eventsDiv = document.createElement('div');
+            eventsDiv.className = 'day-events';
+
+            // Créer la date au format YYYY-MM-DD
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+            
+            const dayEvents = eventsData.filter(event => event.date === dateStr && matchesFilter(event));
+
+            dayEvents.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `day-event-item ${event.type}`;
+                
+                // ✅ STRICTE VALIDATION DE L'ICON AVANT AFFICHAGE
+                let eventIcon = event.icon;
+                if (!eventIcon || String(eventIcon).trim() === '' || String(eventIcon).toLowerCase() === 'undefined') {
+                    eventIcon = getDefaultIconForType(event.type);
+                }
+                
+                const eventName = (event.name && String(event.name).trim()) ? String(event.name).trim() : 'Événement';
+                eventDiv.textContent = `${eventIcon} ${eventName}`;
+                eventDiv.title = eventName;
+                
+                eventDiv.onclick = (e) => {
+                    e.stopPropagation();
+                    openEventModal(event);
+                };
+                eventsDiv.appendChild(eventDiv);
+            });
+
+            dayDiv.appendChild(dayNumberDiv);
+            dayDiv.appendChild(eventsDiv);
+
+            // Clic sur jour
+            dayDiv.onclick = () => {
+                if (dayEvents.length > 0) {
+                    openDayModal(dayEvents, dateStr);
+                }
+            };
+
+            container.appendChild(dayDiv);
+        }
+
+        function matchesFilter(event) {
+            if (currentFilter === 'all') return true;
+            return event.type === currentFilter;
+        }
+
+        // ========== NAVIGATION ==========
+        function previousMonth() {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+            renderCalendar();
+        }
+
+        function todayMonth() {
+            currentMonth = new Date();
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+            renderCalendar();
+        }
+
+        // ========== FILTRAGE ==========
+        function filterEvents(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCalendar();
+        }
+
+        // ========== MODALES ==========
+        function openEventModal(event) {
+            const modal = document.getElementById('eventModal');
+            const body = document.getElementById('modalBody');
+            
+            // ✅ TOUTES LES VARIABLES VALIDÉES STRICTEMENT
+            const priceText = (event && event.price) ? `${parseInt(event.price).toLocaleString()} FCFA` : 'Gratuit';
+            const descriptionText = (event && event.description && String(event.description).trim()) ? String(event.description).trim() : 'Non spécifiée';
+            const themeText = (event && event.theme && String(event.theme).trim()) ? String(event.theme).trim() : 'À annoncer';
+            const timeText = (event && event.time && String(event.time).trim()) ? String(event.time).trim() : 'Horaire TBD';
+            const locationText = (event && event.location && String(event.location).trim()) ? String(event.location).trim() : 'Lieu TBD';
+            const speakersText = (event && Array.isArray(event.speakers) && event.speakers.length > 0) 
+                ? event.speakers.map(s => String(s).trim()).filter(s => s).join(', ') 
+                : 'À annoncer';
+
+            let eventIcon = event.icon;
+            if (!eventIcon || String(eventIcon).trim() === '' || String(eventIcon).toLowerCase() === 'undefined') {
+                eventIcon = getDefaultIconForType(event.type);
+            }
+
+            const eventName = (event && event.name) ? String(event.name) : 'Événement sans titre';
+            const eventDate = (event && event.date) ? String(event.date) : 'Date TBD';
+            const eventType = (event && event.type) ? String(event.type) : 'strategic';
+            const eventStatus = (event && event.status) ? String(event.status) : 'Planifié';
+            const participantsMin = (event && event.participants && event.participants.min) ? parseInt(event.participants.min) : 0;
+            const participantsMax = (event && event.participants && event.participants.max) ? parseInt(event.participants.max) : 0;
+            const registrationLink = (event && event.registrationLink) ? String(event.registrationLink) : '#';
+
+            body.innerHTML = `
+                <div style="background: linear-gradient(135deg, ${getColorForType(eventType)} 0%, rgba(32, 128, 148, 0.1) 100%); padding: 20px; border-radius: 10px; margin-bottom: 20px; color: white;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">${eventIcon}</div>
+                    <div class="modal-title" style="color: white; margin-bottom: 8px;">${eventName}</div>
+                    <div style="font-size: 13px; opacity: 0.95;">${descriptionText}</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                    <div style="background: var(--light-gray); padding: 12px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)};">
+                        <div class="modal-section-title" style="margin-bottom: 6px;">📅 Date & Horaire</div>
+                        <div style="font-size: 13px; font-weight: 600;">${eventDate}</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">${timeText}</div>
+                    </div>
+                    <div style="background: var(--light-gray); padding: 12px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)};">
+                        <div class="modal-section-title" style="margin-bottom: 6px;">📍 Lieu</div>
+                        <div style="font-size: 13px; font-weight: 600;">${locationText}</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                    <div style="background: var(--light-gray); padding: 12px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)};">
+                        <div class="modal-section-title" style="margin-bottom: 6px;">👥 Participants</div>
+                        <div style="font-size: 13px; font-weight: 600;">${participantsMin}-${participantsMax}</div>
+                    </div>
+                    <div style="background: var(--light-gray); padding: 12px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)};">
+                        <div class="modal-section-title" style="margin-bottom: 6px;">💰 Prix</div>
+                        <div style="font-size: 13px; font-weight: 600;">${priceText}</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--light-gray); padding: 14px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)}; margin-bottom: 20px;">
+                    <div class="modal-section-title" style="margin-bottom: 8px;">🎯 Thème</div>
+                    <div style="font-size: 13px; font-weight: 600;">${themeText}</div>
+                </div>
+
+                <div style="background: var(--light-gray); padding: 14px; border-radius: 8px; border-left: 4px solid ${getColorForType(eventType)}; margin-bottom: 20px;">
+                    <div class="modal-section-title" style="margin-bottom: 8px;">🎤 Speakers</div>
+                    <div style="font-size: 13px; font-weight: 600;">${speakersText}</div>
+                </div>
+
+                <div style="background: var(--light-gray); padding: 14px; border-radius: 8px; margin-bottom: 20px;">
+                    <div class="modal-section-title" style="margin-bottom: 8px;">ℹ️ Statut</div>
+                    <div style="display: inline-block; padding: 6px 12px; background: ${getColorForType(eventType)}; color: white; border-radius: 6px; font-size: 12px; font-weight: 600;">${eventStatus}</div>
+                </div>
+
+                <a href="${registrationLink}" target="_blank" style="display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, ${getColorForType(eventType)} 0%, rgba(32, 128, 148, 0.8) 100%); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: all 200ms; margin-bottom: 12px;">
+                    ✨ S'inscrire Maintenant ➜
+                </a>
+            `;
+            modal.classList.add('active');
+        }
+
+        function openDayModal(events, dateStr) {
+            const modal = document.getElementById('eventModal');
+            const body = document.getElementById('modalBody');
+            body.innerHTML = `
+                <div class="modal-title">📅 ${dateStr}</div>
+                <div class="modal-section">
+                    <div class="modal-section-title">Événements du Jour</div>
+                    <div class="modal-section-content">
+                        ${events.map(e => {
+                            let icon = e.icon;
+                            if (!icon || String(icon).trim() === '' || String(icon).toLowerCase() === 'undefined') {
+                                icon = getDefaultIconForType(e.type);
+                            }
+                            const priceText = e.price ? e.price.toLocaleString() + ' FCFA' : 'Gratuit';
+                            return `<div style="margin-bottom: 14px; padding: 10px; background: var(--light-gray); border-radius: 8px; border-left: 4px solid ${getColorForType(e.type)};">
+                                <strong>${icon} ${e.name}</strong><br>
+                                📍 ${e.location}<br>
+                                👥 ${e.participants.min}-${e.participants.max} • 💰 ${priceText}
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        function getColorForType(type) {
+            const colors = {
+                study: '#2160C4',
+                meetup: '#22C55E',
+                training: '#9333EA',
+                webinar: '#06B6D4',
+                external: '#EF4444',
+                recognition: '#EAB308',
+                strategic: '#1F2937'
+            };
+            return colors[type] || '#208094';
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').classList.remove('active');
+        }
+
+        // ========== IMPORT/EXPORT ==========
+        function exportToXLS() {
+            let csv = '\uFEFFid\tnom\tdate\thoraire\ttype\tlieu\tparticipants_min\tparticipants_max\tprix\tstatut\tdescription\tthème\tspeakers\tlien_inscription\icon\n';
+            
+            eventsData.forEach(event => {
+                const speakers = Array.isArray(event.speakers) ? event.speakers.join('; ') : event.speakers;
+                const icon = (event.icon && String(event.icon).trim() !== '') ? event.icon : getDefaultIconForType(event.type);
+                csv += `${event.id}\t${event.name}\t${event.date}\t${event.time || ''}\t${event.type}\t${event.location}\t${event.participants.min}\t${event.participants.max}\t${event.price}\t${event.status}\t${event.description}\t${event.theme || ''}\t${speakers || ''}\t${event.registrationLink || ''}\t${icon}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `IIBA_Cameroon_Agenda_${new Date().toISOString().split('T')[0]}.xls`;
+            link.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Agenda exporté en XLS avec succès!\n\n💡 Conseil: Ouvrir avec Excel ou LibreOffice pour voir les accents correctement.');
+        }
+
+        function importFromXLS() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    let text = e.target.result;
+                    if (text.charCodeAt(0) === 0xFEFF) {
+                        text = text.slice(1);
+                    }
+                    
+                    let lines = text.split(/[\r\n]+/).map(line => line.trim()).filter(line => line.length > 0);
+                    
+                    if (lines.length < 2) {
+                        alert('❌ Le fichier est vide ou invalide');
+                        return;
+                    }
+                    
+                    const headerLine = lines[0];
+                    const headers = headerLine.split('\t').map(h => h.trim().toLowerCase());
+                    
+                    const idIdx = headers.indexOf('id');
+                    const nomIdx = headers.indexOf('nom');
+                    const dateIdx = headers.indexOf('date');
+                    const typeIdx = headers.indexOf('type');
+                    
+                    if (idIdx === -1 || nomIdx === -1 || dateIdx === -1 || typeIdx === -1) {
+                        alert('❌ Colonnes requises manquantes:\n- id, nom, date, type');
+                        return;
+                    }
+                    
+                    const imported = [];
+                    
+                    for (let i = 1; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        if (!line) continue;
+                        
+                        try {
+                            const values = line.split('\t').map(v => v.trim());
+                            
+                            if (!values[idIdx] || !values[nomIdx] || !values[dateIdx] || !values[typeIdx]) {
+                                console.warn(`Ligne ${i}: données requises manquantes`);
+                                continue;
+                            }
+                            
+                            const dateStr = values[dateIdx].trim();
+                            if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                                console.warn(`Ligne ${i}: format date invalide (${dateStr}), attendu: YYYY-MM-DD`);
+                                continue;
+                            }
+                            
+                            const eventType = values[typeIdx].trim().toLowerCase();
+                            const validTypes = ['study', 'meetup', 'training', 'webinar', 'external', 'recognition', 'strategic'];
+                            
+                            let iconValue = values[headers.indexOf('icon')] ? values[headers.indexOf('icon')].trim() : '';
+                            if (!iconValue || iconValue === '' || iconValue.toLowerCase() === 'undefined') {
+                                iconValue = getDefaultIconForType(eventType);
+                            }
+                            
+                            const event = {
+                                id: parseInt(values[idIdx]) || i,
+                                name: values[nomIdx],
+                                date: dateStr,
+                                time: values[headers.indexOf('horaire')] ? values[headers.indexOf('horaire')].trim() : '',
+                                type: validTypes.includes(eventType) ? eventType : 'study',
+                                location: values[headers.indexOf('lieu')] ? values[headers.indexOf('lieu')].trim() : 'TBD',
+                                participants: { 
+                                    min: parseInt(values[headers.indexOf('participants_min')]) || 1, 
+                                    max: parseInt(values[headers.indexOf('participants_max')]) || 10 
+                                },
+                                price: parseInt(values[headers.indexOf('prix')]) || 0,
+                                status: values[headers.indexOf('statut')] ? values[headers.indexOf('statut')].trim() : 'Planifié',
+                                description: values[headers.indexOf('description')] ? values[headers.indexOf('description')].trim() : '',
+                                theme: values[headers.indexOf('thème')] ? values[headers.indexOf('thème')].trim() : '',
+                                speakers: values[headers.indexOf('speakers')] ? values[headers.indexOf('speakers')].split(';').map(s => s.trim()).filter(s => s) : [],
+                                registrationLink: values[headers.indexOf('lien_inscription')] ? values[headers.indexOf('lien_inscription')].trim() : '#',
+                                icon: iconValue
+                            };
+                            
+                            imported.push(event);
+                            console.log(`✓ Événement ${i}:`, event.name, '- Icon:', event.icon);
+                            
+                        } catch (rowErr) {
+                            console.error(`Erreur ligne ${i}:`, rowErr);
+                        }
+                    }
+
+                    if (imported.length > 0) {
+                        eventsData = [...imported];
+                        saveData();
+                        updateFilterCounts();
+                        currentMonth = new Date(2026, 0, 1);
+                        currentFilter = 'all';
+                        document.querySelectorAll('.filter-btn').forEach((btn, idx) => {
+                            if (idx === 0) btn.classList.add('active');
+                            else btn.classList.remove('active');
+                        });
+                        renderCalendar();
+                        alert(`✅ Agenda importé avec succès!\n\n📊 ${imported.length} événements chargés\n✨ Icons auto-attribués pour les events manquants`);
+                    } else {
+                        alert('❌ Aucun événement valide trouvé');
+                    }
+                } catch (err) {
+                    console.error('Erreur import:', err);
+                    alert('❌ Erreur lecture fichier: ' + err.message);
+                }
+            };
+            reader.readAsText(file, 'utf-8');
+            document.getElementById('importFile').value = '';
+        }
+
+        function updateFilterCounts() {
+            const counts = {
+                all: eventsData.length,
+                study: eventsData.filter(e => e.type === 'study').length,
+                meetup: eventsData.filter(e => e.type === 'meetup').length,
+                training: eventsData.filter(e => e.type === 'training').length,
+                webinar: eventsData.filter(e => e.type === 'webinar').length,
+                external: eventsData.filter(e => e.type === 'external').length,
+                recognition: eventsData.filter(e => e.type === 'recognition').length
+            };
+
+            document.querySelectorAll('.filter-btn').forEach((btn, idx) => {
+                const types = ['all', 'study', 'meetup', 'training', 'webinar', 'external', 'recognition'];
+                const type = types[idx];
+                const countSpan = btn.querySelector('.filter-count');
+                if (countSpan) {
+                    countSpan.textContent = counts[type] || 0;
+                }
+            });
+        }
+
+        function resetData() {
+            if (confirm('⚠️ Êtes-vous sûr? Cela réinitialisera les données par défaut.')) {
+                eventsData = [...defaultEventsData];
+                localStorage.removeItem('iiba_events_2026');
+                renderCalendar();
+                alert('✅ Données réinitialisées');
+            }
+        }
+
+        function printCalendar() {
+            window.print();
+        }
+
+        function shareAgenda() {
+            const text = "📅 IIBA Cameroon - Agenda 2026 Interactif\n\n🔗 Consulte le calendrier complet et inscris-toi aux événements:\n\n🎯 94+ événements\n👥 950+ participants prévus\n💰 31.7M FCFA de revenus\n\n#IIBA #BusinessAnalysis #Cameroon";
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+        }
+
+        // ========== INITIALISATION ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateFilterCounts();
+            renderCalendar();
+        });
+
+        window.onclick = (event) => {
+            const modal = document.getElementById('eventModal');
+            if (event.target === modal) closeModal();
+        };
+    </script>
+</body>
+</html>
