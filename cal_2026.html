@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIBA Cameroon - Calendrier 2026</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --iiba-primary: #0066cc;
+            --iiba-secondary: #ff6b35;
+            --iiba-accent: #2db396;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--iiba-primary) 0%, #0052a3 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.15);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .header-title .icon {
+            font-size: 32px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--iiba-secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .calendar-wrapper {
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-light);
+        }
+
+        .month-year {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--iiba-primary);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--iiba-primary);
+            color: white;
+            border-color: var(--iiba-primary);
+        }
+
+        .calendar-grid {
+            padding: 20px;
+        }
+
+        .day-names {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .day-name {
+            text-align: center;
+            font-weight: 600;
+            color: var(--iiba-primary);
+            padding: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            background: var(--bg-white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .day:hover {
+            border-color: var(--iiba-primary);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+            background: rgba(0, 102, 204, 0.02);
+        }
+
+        .day.other-month {
+            background: var(--bg-light);
+            color: var(--text-secondary);
+        }
+
+        .day.today {
+            background: rgba(0, 102, 204, 0.1);
+            border-color: var(--iiba-primary);
+            font-weight: 600;
+        }
+
+        .day-date {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .day-events {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .day-event {
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: white;
+            font-weight: 500;
+        }
+
+        .event-strategic { background: var(--iiba-primary); }
+        .event-recognition { background: var(--iiba-secondary); }
+        .event-study { background: var(--iiba-accent); }
+        .event-webinar { background: #9c27b0; }
+        .event-training { background: #ff9800; }
+        .event-meetup { background: #4caf50; }
+        .event-external { background: #2196f3; }
+
+        .sidebar {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 20px;
+            max-height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--iiba-primary);
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            padding: 12px;
+            border-left: 4px solid var(--iiba-primary);
+            border-radius: 4px;
+            background: var(--bg-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .event-item:hover {
+            transform: translateX(4px);
+            background: rgba(0, 102, 204, 0.08);
+        }
+
+        .event-item-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .event-item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--iiba-primary);
+            color: white;
+            border-color: var(--iiba-primary);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--iiba-primary);
+            color: var(--iiba-primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--iiba-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-detail {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .modal-label {
+            font-weight: 600;
+            color: var(--iiba-primary);
+            display: inline-block;
+            width: 100px;
+        }
+
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-link {
+            flex: 1;
+            padding: 10px 15px;
+            background: var(--iiba-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-link:hover {
+            background: #0052a3;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--iiba-primary), #0052a3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .day {
+                font-size: 11px;
+            }
+
+            .day-event {
+                font-size: 9px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div>
+                        <h1>IIBA Cameroon</h1>
+                        <p>Calendrier des Événements 2026</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="downloadCalendar()">
+                        <i class="fas fa-download"></i> Télécharger
+                    </button>
+                    <button class="btn btn-primary" onclick="openImportModal()">
+                        <i class="fas fa-upload"></i> Importer ICS
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div>
+                <div class="stats" id="stats"></div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="searchInput" placeholder="🔍 Rechercher un événement..." 
+                        style="padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; flex: 1; min-width: 200px;">
+                    <button class="btn btn-secondary" onclick="clearSearch()" style="padding: 10px 15px;">
+                        <i class="fas fa-times"></i> Effacer
+                    </button>
+                </div>
+
+                <div class="filters" id="filters"></div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const searchInput = document.getElementById('searchInput');
+                        if (searchInput) {
+                            searchInput.addEventListener('keyup', applyFilters);
+                        }
+                    });
+                </script>
+
+                <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" onclick="previousMonth()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="month-year" id="monthYear"></div>
+                        <button class="calendar-nav" onclick="nextMonth()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-names">
+                            <div class="day-name">Dim</div>
+                            <div class="day-name">Lun</div>
+                            <div class="day-name">Mar</div>
+                            <div class="day-name">Mer</div>
+                            <div class="day-name">Jeu</div>
+                            <div class="day-name">Ven</div>
+                            <div class="day-name">Sam</div>
+                        </div>
+                        <div class="days" id="calendar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeEventModal()">&times;</span>
+            <div id="eventDetails"></div>
+            <div class="modal-actions">
+                <a id="eventLink" class="btn-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Voir plus
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeImportModal()">&times;</span>
+            <h2 style="color: var(--iiba-primary); margin-bottom: 15px;">
+                <i class="fas fa-upload"></i> Importer un calendrier ICS
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 14px;">
+                Sélectionnez un fichier ICS pour importer les événements
+            </p>
+            <input type="file" id="fileInput" accept=".ics" style="width: 100%; padding: 10px; border: 2px dashed var(--iiba-primary); border-radius: 8px; margin-bottom: 15px;">
+            <button class="btn btn-primary" style="width: 100%;" onclick="importICS()">
+                <i class="fas fa-check"></i> Importer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                           'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        const eventTypes = {
+            'strategic': { label: 'Stratégique', icon: '🎯' },
+            'recognition': { label: 'Reconnaissance', icon: '⭐' },
+            'study': { label: 'Formation', icon: '📚' },
+            'webinar': { label: 'Webinaire', icon: '💻' },
+            'training': { label: 'Formation', icon: '🎓' },
+            'meetup': { label: 'Meetup', icon: '👥' },
+            'external': { label: 'Externe', icon: '🌐' }
+        };
+
+        let currentDate = new Date();
+        let allEvents = [];
+        let filteredEvents = [];
+        let activeFilters = new Set();
+
+        // Default ICS data embedded with all 58 events
+        const defaultICSData = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//IIBA Cameroon//Agenda Complet 2026//FR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Calendrier IIBA Cameroon 2026
+X-WR-TIMEZONE:Africa/Douala
+X-WR-CALDESC:Agenda complet des événements IIBA Cameroon 2026
+BEGIN:VEVENT
+UID:1-20251228T130000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20251228T130000Z
+DTEND:20251228T140000Z
+SUMMARY:Bilan 2025 et Agenda 2026
+DESCRIPTION:Bilan 2025 + Lancement 2026\\nThème: Bilan & Vision 2026\\nLangue: FR/EN\\nType: strategic\\nParticipants: 10-15\\nPrix: 0 FCFA
+LOCATION:Platinum Cocotiers
+STATUS:CONFIRMED
+URL:https://us06web.zoom.us/meeting/register/XZ7lFeRDQAW1B5Cb1k-oOA
+END:VEVENT
+BEGIN:VEVENT
+UID:2-20260108T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260108T180000Z
+DTEND:20260108T190000Z
+SUMMARY:Ma vie de BA #1
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:3-20260113T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260113T173000Z
+DTEND:20260113T183000Z
+SUMMARY:Groupe d'Études Cohorte 1 (FR)
+DESCRIPTION:Lancement officiel cohorte 1\\nThème: Formation ECBA\\nLangue: FR\\nType: study\\nParticipants: 10-20\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+URL:https://zoom.iiba-cameroon.org/cohorte1
+END:VEVENT
+BEGIN:VEVENT
+UID:4-20260114T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260114T173000Z
+DTEND:20260114T183000Z
+SUMMARY:Study Group Cohort 1 (EN)
+DESCRIPTION:Lancement officiel cohorte 1\\nThème: Formation ECBA\\nLangue: EN\\nType: study\\nParticipants: 2-10\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+URL:https://zoom.iiba-cameroon.org/cohorte1
+END:VEVENT
+BEGIN:VEVENT
+UID:5-20260122T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260122T180000Z
+DTEND:20260122T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 10-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:6-20260123T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260123T080000Z
+DTEND:20260123T090000Z
+SUMMARY:Livre Blanc GECAM
+DESCRIPTION:Mini-conférence + Networking\\nThème: Données & Transformation\\nLangue: FR\\nType: external\\nParticipants: 20-100\\nPrix: 0 FCFA
+LOCATION:Douala/Yaoundé
+STATUS:CONFIRMED
+URL:https://gecam-cameroon.org
+END:VEVENT
+BEGIN:VEVENT
+UID:7-20260130T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260130T090000Z
+DTEND:20260130T093000Z
+SUMMARY:BA du Mois #1
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité & Reconnaissance\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:8-20260205T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260205T180000Z
+DTEND:20260205T190000Z
+SUMMARY:Ma vie de BA #2
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:9-20260212T140000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260212T140000Z
+DTEND:20260212T150000Z
+SUMMARY:BA Meet Up Présentiel 1
+DESCRIPTION:Cas pratique\\nThème: BA techniques et méthodologie, Projet et opérationnel\\nLangue: FR\\nType: meetup\\nParticipants: 15-50\\nPrix: 1000 FCFA
+LOCATION:DLA Coworking Space
+STATUS:TENTATIVE
+URL:https://forms.iiba-cameroon.org/meetup1
+END:VEVENT
+BEGIN:VEVENT
+UID:10-20260219T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260219T180000Z
+DTEND:20260219T190000Z
+SUMMARY:Masterclass BPMN Cohorte 1
+DESCRIPTION:Mapping de processus - 4 sessions\\nThème: Process Mapping BPMN\\nLangue: FR\\nType: training\\nParticipants: 15-20\\nPrix: 50000 FCFA
+LOCATION:Online
+STATUS:CONFIRMED
+URL:https://zoom.iiba-cameroon.org/bpmn-1
+END:VEVENT
+BEGIN:VEVENT
+UID:11-20260226T070000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260226T070000Z
+DTEND:20260227T150000Z
+SUMMARY:SUFAWE 2026
+DESCRIPTION:Stand Up For African Women Entrepreneurs\\nThème: Femmes Entrepreneures\\nLangue: FR\\nType: external\\nParticipants: 20-100\\nPrix: 0 FCFA
+LOCATION:Douala
+STATUS:CONFIRMED
+URL:https://sufawe.org
+END:VEVENT
+BEGIN:VEVENT
+UID:12-20260227T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260227T090000Z
+DTEND:20260227T093000Z
+SUMMARY:BA du Mois #2
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:13-20260305T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260305T180000Z
+DTEND:20260305T190000Z
+SUMMARY:Ma vie de BA #3
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:14-20260312T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260312T180000Z
+DTEND:20260312T190000Z
+SUMMARY:Question pour 1 BA #1
+DESCRIPTION:Mise en situation via Quiz\\nThème: Histoires de BAs certifiés\\nLangue: FR\\nType: webinar\\nParticipants: 50-100\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:TENTATIVE
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:15-20260320T190000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260320T190000Z
+DTEND:20260320T200000Z
+SUMMARY:CFBA Launching Event (EN)
+DESCRIPTION:CFBA Launching Event\\nLangue: EN\\nType: meetup\\nParticipants: 30-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/meeting/iiba-cameroon-en
+END:VEVENT
+BEGIN:VEVENT
+UID:16-20260326T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260326T090000Z
+DTEND:20260326T100000Z
+SUMMARY:Masterclass GECAM #1
+DESCRIPTION:Données & Transformation Digitale\\nThème: Digital Transformation\\nLangue: FR\\nType: training\\nParticipants: 20-100\\nPrix: 75000 FCFA
+LOCATION:GECAM
+STATUS:CONFIRMED
+URL:https://gecam-cameroon.org
+END:VEVENT
+BEGIN:VEVENT
+UID:17-20260326T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260326T080000Z
+DTEND:20260329T150000Z
+SUMMARY:14ème Conférence ministérielle de l'OMC
+DESCRIPTION:Mini-conférence + Networking\\nThème: Données & Transformation\\nLangue: FR\\nType: external\\nParticipants: 20-100\\nPrix: 0 FCFA
+LOCATION:Yaoundé
+STATUS:CONFIRMED
+URL:https://gecam-cameroon.org
+END:VEVENT
+BEGIN:VEVENT
+UID:18-20260327T190000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260327T190000Z
+DTEND:20260327T200000Z
+SUMMARY:Online BA Meet Up (EN)
+DESCRIPTION:Retours d'expérience\\nThème: Quotidien\\nLangue: EN\\nType: meetup\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/meeting/iiba-cameroon-en
+END:VEVENT
+BEGIN:VEVENT
+UID:19-20260327T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260327T090000Z
+DTEND:20260327T093000Z
+SUMMARY:BA du Mois #3
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:20-20260402T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260402T180000Z
+DTEND:20260402T190000Z
+SUMMARY:Ma vie de BA #4
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:21-20260409T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260409T180000Z
+DTEND:20260409T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:22-20260416T140000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260416T140000Z
+DTEND:20260416T150000Z
+SUMMARY:BA Meet Up Présentiel 2
+DESCRIPTION:Cas pratique\\nThème: BA techniques et méthodologie, Projet et opérationnel\\nLangue: FR\\nType: meetup\\nParticipants: 15-50\\nPrix: 1000 FCFA
+LOCATION:YDE Coworking Space
+STATUS:TENTATIVE
+URL:https://forms.iiba-cameroon.org/meetup1
+END:VEVENT
+BEGIN:VEVENT
+UID:23-20260424T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260424T090000Z
+DTEND:20260424T093000Z
+SUMMARY:BA du Mois #4
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:24-20260507T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260507T180000Z
+DTEND:20260507T190000Z
+SUMMARY:Ma vie de BA #5
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:25-20260512T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260512T173000Z
+DTEND:20260512T183000Z
+SUMMARY:Groupe d'Études Cohorte 2 (FR)
+DESCRIPTION:Lancement officiel cohorte 2\\nThème: Formation ECBA\\nLangue: FR\\nType: study\\nParticipants: 10-20\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+URL:https://zoom.iiba-cameroon.org/cohorte2
+END:VEVENT
+BEGIN:VEVENT
+UID:26-20260513T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260513T173000Z
+DTEND:20260513T183000Z
+SUMMARY:Study Group Cohort 2 (EN)
+DESCRIPTION:Lancement officiel cohorte 2\\nThème: Formation ECBA\\nLangue: EN\\nType: study\\nParticipants: 2-10\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:27-20260514T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260514T080000Z
+DTEND:20260516T150000Z
+SUMMARY:E-Gov'A 2026
+DESCRIPTION:Mini-conférence + Networking\\nThème: Données & Transformation\\nLangue: FR\\nType: external\\nParticipants: 80-100\\nPrix: 0 FCFA
+LOCATION:Yaoundé
+STATUS:CONFIRMED
+URL:https://dig.watch/event/e-gova-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:28-20260521T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260521T180000Z
+DTEND:20260521T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:29-20260529T190000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260529T190000Z
+DTEND:20260529T200000Z
+SUMMARY:Online BA Meet Up (EN)
+DESCRIPTION:Retours d'expérience\\nThème: Quotidien\\nLangue: EN\\nType: meetup\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/meeting/iiba-cameroon-en
+END:VEVENT
+BEGIN:VEVENT
+UID:30-20260529T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260529T090000Z
+DTEND:20260529T093000Z
+SUMMARY:BA du Mois #5
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:31-20260604T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260604T180000Z
+DTEND:20260604T190000Z
+SUMMARY:Ma vie de BA #6
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:32-20260612T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260612T080000Z
+DTEND:20260621T150000Z
+SUMMARY:PROMOTE 2026
+DESCRIPTION:Mini-conférence + Networking\\nThème: Données & Transformation\\nLangue: FR\\nType: external\\nParticipants: 80-100\\nPrix: 0 FCFA
+LOCATION:Yaoundé
+STATUS:CONFIRMED
+URL:https://dig.watch/event/e-gova-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:33-20260618T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260618T180000Z
+DTEND:20260618T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:34-20260626T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260626T090000Z
+DTEND:20260626T093000Z
+SUMMARY:BA du Mois #6
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:35-20260702T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260702T180000Z
+DTEND:20260702T190000Z
+SUMMARY:Ma vie de BA #7
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:36-20260709T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260709T180000Z
+DTEND:20260709T190000Z
+SUMMARY:Event avec IIBA CIV
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:37-20260716T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260716T180000Z
+DTEND:20260716T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:38-20260723T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260723T180000Z
+DTEND:20260723T190000Z
+SUMMARY:Event avec PMI
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:39-20260731T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260731T090000Z
+DTEND:20260731T093000Z
+SUMMARY:BA du Mois #7
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:40-20260806T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260806T180000Z
+DTEND:20260806T190000Z
+SUMMARY:Ma vie de BA #8
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:41-20260813T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260813T180000Z
+DTEND:20260813T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:42-20260820T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260820T180000Z
+DTEND:20260820T190000Z
+SUMMARY:Event avec IIBA Canada
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:43-20260828T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260828T080000Z
+DTEND:20260828T090000Z
+SUMMARY:International Conference on Project Management Techniques in Industrial Engineering (ICPMTIE)
+DESCRIPTION:Mini-conférence + Networking\\nThème: Données & Transformation\\nLangue: FR\\nType: external\\nParticipants: 80-100\\nPrix: 0 FCFA
+LOCATION:Yaoundé
+STATUS:CONFIRMED
+URL:https://dig.watch/event/e-gova-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:44-20260828T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260828T090000Z
+DTEND:20260828T093000Z
+SUMMARY:BA du Mois #8
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:45-20260903T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260903T180000Z
+DTEND:20260903T190000Z
+SUMMARY:Ma vie de BA #9
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:46-20260911T190000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260911T190000Z
+DTEND:20260911T200000Z
+SUMMARY:Online BA Meet Up (EN)
+DESCRIPTION:Retours d'expérience\\nThème: Quotidien\\nLangue: EN\\nType: meetup\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/meeting/iiba-cameroon-en
+END:VEVENT
+BEGIN:VEVENT
+UID:47-20260915T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260915T173000Z
+DTEND:20260915T183000Z
+SUMMARY:Groupe d'Études Cohorte 3 (FR)
+DESCRIPTION:Lancement officiel cohorte 3\\nThème: Formation ECBA\\nLangue: FR\\nType: study\\nParticipants: 10-20\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+URL:https://zoom.iiba-cameroon.org/cohorte2
+END:VEVENT
+BEGIN:VEVENT
+UID:48-20260916T173000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260916T173000Z
+DTEND:20260916T183000Z
+SUMMARY:Study Group Cohort 3 (EN)
+DESCRIPTION:Lancement officiel cohorte 3\\nThème: Formation ECBA\\nLangue: EN\\nType: study\\nParticipants: 2-10\\nPrix: 340000 FCFA
+LOCATION:Online + Présentiel
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:49-20260925T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20260925T090000Z
+DTEND:20260925T093000Z
+SUMMARY:BA du Mois #9
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:50-20261001T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261001T180000Z
+DTEND:20261001T190000Z
+SUMMARY:Ma vie de BA #10
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:51-20261015T140000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261015T140000Z
+DTEND:20261015T150000Z
+SUMMARY:BA Meet Up Présentiel 3
+DESCRIPTION:Cas pratique\\nThème: BA techniques et méthodologie, Projet et opérationnel\\nLangue: FR\\nType: meetup\\nParticipants: 15-50\\nPrix: 1000 FCFA
+LOCATION:DLA Coworking Space
+STATUS:TENTATIVE
+URL:https://forms.iiba-cameroon.org/meetup1
+END:VEVENT
+BEGIN:VEVENT
+UID:52-20261030T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261030T090000Z
+DTEND:20261030T093000Z
+SUMMARY:BA du Mois #10
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:53-20261105T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261105T180000Z
+DTEND:20261105T190000Z
+SUMMARY:Ma vie de BA #11
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:54-20261112T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261112T180000Z
+DTEND:20261112T190000Z
+SUMMARY:BA pour les nuls / Masterclass / Podcast
+DESCRIPTION:Préparation à l'examen ECBA\\nThème: Préparation Examen\\nLangue: FR/EN\\nType: webinar\\nParticipants: 15-50\\nPrix: 0 FCFA
+LOCATION:Zoom
+STATUS:CONFIRMED
+URL:https://zoom.us/webinar/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:55-20261127T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261127T090000Z
+DTEND:20261127T093000Z
+SUMMARY:BA du Mois #11
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:56-20261203T180000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261203T180000Z
+DTEND:20261203T190000Z
+SUMMARY:Ma vie de BA #12
+DESCRIPTION:Histoires de BAs certifiés\\nThème: Partage d'Expériences\\nLangue: FR/EN\\nType: recognition\\nParticipants: 20-50\\nPrix: 0 FCFA
+LOCATION:Groupe WhatsApp
+STATUS:CONFIRMED
+URL:https://chat.whatsapp.com/iiba-cameroon
+END:VEVENT
+BEGIN:VEVENT
+UID:57-20261217T080000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261217T080000Z
+DTEND:20261217T090000Z
+SUMMARY:Congrès Annuel 2026 - 5 Ans 🎉
+DESCRIPTION:Célébration 5 ans IIBA Cameroon\\nThème: Célébration & Achievements\\nLangue: FR/EN\\nType: strategic\\nParticipants: 50-100\\nPrix: 15000 FCFA
+LOCATION:Platinum
+STATUS:CONFIRMED
+URL:https://forms.iiba-cameroon.org/congress2026
+END:VEVENT
+BEGIN:VEVENT
+UID:58-20261225T090000Z@iiba-cameroon
+DTSTAMP:20251228T081907Z
+DTSTART:20261225T090000Z
+DTEND:20261225T093000Z
+SUMMARY:BA du Mois #12
+DESCRIPTION:Spotlight BA certifié ou bénévole ou exceptionnel\\nThème: Visibilité BA\\nLangue: FR/EN\\nType: recognition\\nParticipants: 1-1\\nPrix: 0 FCFA
+LOCATION:LinkedIn
+STATUS:CONFIRMED
+URL:https://linkedin.com/company/iiba-cameroon
+END:VEVENT
+END:VCALENDAR`;
+
+        function parseICS(icsText) {
+            const events = [];
+            const eventMatches = icsText.match(/BEGIN:VEVENT[\s\S]*?END:VEVENT/g) || [];
+
+            eventMatches.forEach(eventText => {
+                const event = {};
+                const lines = eventText.split('\n');
+                let description = '';
+
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i];
+                    
+                    // Handle line folding
+                    while (i + 1 < lines.length && lines[i + 1][0] === ' ') {
+                        i++;
+                        line += lines[i].substring(1);
+                    }
+
+                    if (line.startsWith('SUMMARY:')) {
+                        event.summary = line.substring(8).trim();
+                    } else if (line.startsWith('DTSTART:')) {
+                        event.start = parseDate(line.substring(8));
+                    } else if (line.startsWith('DTEND:')) {
+                        event.end = parseDate(line.substring(6));
+                    } else if (line.startsWith('LOCATION:')) {
+                        event.location = line.substring(9).trim();
+                    } else if (line.startsWith('DESCRIPTION:')) {
+                        description = line.substring(12).trim().replace(/\\n/g, '\n');
+                    } else if (line.startsWith('URL:')) {
+                        event.url = line.substring(4).trim();
+                    } else if (line.startsWith('STATUS:')) {
+                        event.status = line.substring(7).trim();
+                    }
+                }
+
+                event.description = description;
+                
+                // Extract type from description
+                const typeMatch = description.match(/Type:\s*(\w+)/);
+                event.type = typeMatch ? typeMatch[1].toLowerCase() : 'external';
+
+                if (event.summary && event.start) {
+                    events.push(event);
+                }
+            });
+
+            return events;
+        }
+
+        function parseDate(dateString) {
+            dateString = dateString.trim();
+            if (dateString.length === 8) {
+                return new Date(dateString.substring(0, 4), 
+                              parseInt(dateString.substring(4, 6)) - 1,
+                              dateString.substring(6, 8));
+            }
+            const year = dateString.substring(0, 4);
+            const month = dateString.substring(4, 6);
+            const day = dateString.substring(6, 8);
+            const hour = dateString.substring(9, 11) || '00';
+            const min = dateString.substring(11, 13) || '00';
+            return new Date(year, parseInt(month) - 1, day, hour, min);
+        }
+
+        function loadEvents() {
+            allEvents = parseICS(defaultICSData);
+            filteredEvents = [...allEvents];
+            updateFilters();
+            renderCalendar();
+            updateStats();
+        }
+
+        function updateFilters() {
+            const types = [...new Set(allEvents.map(e => e.type))];
+            const filtersDiv = document.getElementById('filters');
+            filtersDiv.innerHTML = '';
+            
+            types.forEach(type => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = (eventTypes[type]?.label || type);
+                btn.onclick = () => toggleFilter(type, btn);
+                filtersDiv.appendChild(btn);
+            });
+        }
+
+        function toggleFilter(type, btn) {
+            if (activeFilters.has(type)) {
+                activeFilters.delete(type);
+                btn.classList.remove('active');
+            } else {
+                activeFilters.add(type);
+                btn.classList.add('active');
+            }
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            
+            let results = allEvents;
+            
+            // Apply type filters
+            if (activeFilters.size > 0) {
+                results = results.filter(e => activeFilters.has(e.type));
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                results = results.filter(e => 
+                    e.summary.toLowerCase().includes(searchTerm) ||
+                    e.location.toLowerCase().includes(searchTerm) ||
+                    e.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            filteredEvents = results;
+            renderCalendar();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            applyFilters();
+        }
+
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            const totalEvents = allEvents.length;
+            const confirmedEvents = allEvents.filter(e => e.status === 'CONFIRMED').length;
+            const nextEvent = allEvents.filter(e => e.start > new Date()).sort((a, b) => a.start - b.start)[0];
+            const daysUntilNext = nextEvent ? Math.ceil((nextEvent.start - new Date()) / (1000 * 60 * 60 * 24)) : 0;
+
+            stats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalEvents}</div>
+                    <div class="stat-label">Événements totaux</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, var(--iiba-secondary), #e55a2a);">
+                    <div class="stat-number">${confirmedEvents}</div>
+                    <div class="stat-label">Confirmés</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, var(--iiba-accent), #24a37f);">
+                    <div class="stat-number">${daysUntilNext || '—'}</div>
+                    <div class="stat-label">Jours avant prochain</div>
+                </div>
+            `;
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById('monthYear').textContent = 
+                `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0).getDate();
+            const nextDays = 7 - lastDay.getDay();
+
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+
+            // Previous month days
+            for (let i = firstDay.getDay() - 1; i >= 0; i--) {
+                calendar.appendChild(createDayElement(prevLastDay - i, true));
+            }
+
+            // Current month days
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                calendar.appendChild(createDayElement(day, false, year, month));
+            }
+
+            // Next month days
+            for (let day = 1; day <= nextDays; day++) {
+                calendar.appendChild(createDayElement(day, true));
+            }
+        }
+
+        function createDayElement(day, otherMonth, year, month) {
+            const dayEl = document.createElement('div');
+            dayEl.className = 'day';
+            if (otherMonth) dayEl.classList.add('other-month');
+
+            const today = new Date();
+            if (!otherMonth && day === today.getDate() && 
+                month === today.getMonth() && year === today.getFullYear()) {
+                dayEl.classList.add('today');
+            }
+
+            const dateEl = document.createElement('div');
+            dateEl.className = 'day-date';
+            dateEl.textContent = day;
+            dayEl.appendChild(dateEl);
+
+            if (!otherMonth) {
+                const eventsEl = document.createElement('div');
+                eventsEl.className = 'day-events';
+
+                const dateCheck = new Date(year, month, day);
+                const dayEvents = filteredEvents.filter(e => {
+                    const eventDate = new Date(e.start);
+                    return eventDate.toDateString() === dateCheck.toDateString();
+                });
+
+                dayEvents.slice(0, 2).forEach(event => {
+                    const eventEl = document.createElement('div');
+                    eventEl.className = `day-event event-${event.type}`;
+                    eventEl.textContent = (eventTypes[event.type]?.icon || '📌') + ' ' + event.summary.substring(0, 12);
+                    eventEl.style.cursor = 'pointer';
+                    eventEl.onclick = (e) => {
+                        e.stopPropagation();
+                        showEventDetails(event);
+                    };
+                    eventsEl.appendChild(eventEl);
+                });
+
+                if (dayEvents.length > 2) {
+                    const moreEl = document.createElement('div');
+                    moreEl.style.fontSize = '10px';
+                    moreEl.style.padding = '2px 4px';
+                    moreEl.style.color = 'var(--text-secondary)';
+                    moreEl.textContent = `+${dayEvents.length - 2} plus`;
+                    eventsEl.appendChild(moreEl);
+                }
+
+                dayEl.appendChild(eventsEl);
+                dayEl.onclick = () => showDayEvents(dateCheck, dayEvents);
+            }
+
+            return dayEl;
+        }
+
+        function showEventDetails(event) {
+            const modal = document.getElementById('eventModal');
+            const details = document.getElementById('eventDetails');
+            const link = document.getElementById('eventLink');
+
+            const icon = eventTypes[event.type]?.icon || '📌';
+            
+            // Extract detailed info from description
+            const descLines = event.description.split('\n');
+            const descObj = {};
+            descLines.forEach(line => {
+                const match = line.match(/^(.+?):\s*(.+)$/);
+                if (match) {
+                    const key = match[1].trim();
+                    const val = match[2].trim();
+                    if (key) descObj[key] = val;
+                }
+            });
+            
+            const endTime = event.end ? event.end.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : '';
+            const startTime = event.start.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            
+            details.innerHTML = `
+                <div class="modal-title">
+                    ${icon} ${event.summary}
+                </div>
+                <div class="modal-detail">
+                    <span class="modal-label">📅 Date:</span>
+                    ${event.start.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </div>
+                <div class="modal-detail">
+                    <span class="modal-label">⏰ Heure:</span>
+                    ${startTime}${endTime ? ' - ' + endTime : ''}
+                </div>
+                <div class="modal-detail">
+                    <span class="modal-label">📍 Lieu:</span>
+                    ${event.location || 'Non spécifié'}
+                </div>
+                <div class="modal-detail">
+                    <span class="modal-label">📝 Type:</span>
+                    ${eventTypes[event.type]?.label || event.type}
+                </div>
+                ${descObj['Thème'] ? `
+                <div class="modal-detail">
+                    <span class="modal-label">🎯 Thème:</span>
+                    ${descObj['Thème']}
+                </div>
+                ` : ''}
+                ${descObj['Langue'] ? `
+                <div class="modal-detail">
+                    <span class="modal-label">🗣️ Langue:</span>
+                    ${descObj['Langue']}
+                </div>
+                ` : ''}
+                ${descObj['Participants'] ? `
+                <div class="modal-detail">
+                    <span class="modal-label">👥 Participants:</span>
+                    ${descObj['Participants']}
+                </div>
+                ` : ''}
+                ${descObj['Prix'] ? `
+                <div class="modal-detail">
+                    <span class="modal-label">💰 Prix:</span>
+                    ${descObj['Prix']}
+                </div>
+                ` : ''}
+            `;
+
+            if (event.url) {
+                link.href = event.url;
+                link.style.display = 'block';
+            } else {
+                link.style.display = 'none';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function showDayEvents(date, events) {
+            const modal = document.getElementById('eventModal');
+            const details = document.getElementById('eventDetails');
+
+            details.innerHTML = `
+                <div class="modal-title">
+                    📅 ${date.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </div>
+                ${events.length === 0 ? '<p style="color: var(--text-secondary);">Aucun événement ce jour</p>' : ''}
+                ${events.map((e, i) => `
+                    <div class="modal-detail" style="cursor: pointer; padding: 10px; background: var(--bg-light); border-radius: 4px; margin-bottom: 8px;" onclick="showEventDetails(events[${i}])">
+                        <strong>${eventTypes[e.type]?.icon || '📌'} ${e.summary}</strong><br>
+                        <small style="color: var(--text-secondary);">${e.start.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</small>
+                    </div>
+                `).join('')}
+            `;
+
+            document.getElementById('eventLink').style.display = 'none';
+            modal.classList.add('active');
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.remove('active');
+        }
+
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('active');
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('active');
+        }
+
+        function importICS() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) {
+                alert('Veuillez sélectionner un fichier');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                allEvents = parseICS(e.target.result);
+                filteredEvents = [...allEvents];
+                activeFilters.clear();
+                updateFilters();
+                renderCalendar();
+                updateStats();
+                closeImportModal();
+                alert('Calendrier importé avec succès!');
+            };
+            reader.readAsText(file);
+        }
+
+        function downloadCalendar() {
+            const link = document.createElement('a');
+            link.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(defaultICSData);
+            link.download = 'IIBA_Cameroon_Agenda.ics';
+            link.click();
+        }
+
+        // Initialize
+        loadEvents();
+    </script>
+</body>
+</html>
